@@ -6,7 +6,11 @@ client = OpenAI()
 
 
 def extract_from_pdf(pdf_bytes):
+    # ✅ Convert PDF → base64
     base64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
+
+    # ✅ FIX: Add correct data URL prefix
+    data_url = f"data:application/pdf;base64,{base64_pdf}"
 
     prompt = """You are an expert invoice data extractor.
 
@@ -46,7 +50,7 @@ Return ONLY JSON:
                         "type": "file",
                         "file": {
                             "filename": "invoice.pdf",
-                            "file_data": base64_pdf
+                            "file_data": data_url  # ✅ FIXED
                         }
                     }
                 ]
@@ -56,9 +60,16 @@ Return ONLY JSON:
     )
 
     output = response.choices[0].message.content
+
+    # ✅ Clean markdown safely
     cleaned = output.replace("```json", "").replace("```", "").strip()
 
-    return json.loads(cleaned)
+    try:
+        return json.loads(cleaned)
+    except Exception as e:
+        print("⚠️ JSON parsing failed")
+        print(cleaned)
+        return {"error": "Invalid JSON", "raw": cleaned}
 
 
 def process_invoice(pdf_bytes):

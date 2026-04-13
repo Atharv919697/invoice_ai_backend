@@ -14,14 +14,34 @@ def extract_from_pdf(pdf_bytes):
 
     prompt = """You are an expert invoice data extractor.
 
-Extract data from this invoice PDF.
+Your task is to extract invoice data from the PDF.
 
-Rules:
-- Vendor = seller (NOT customer)
-- Ignore "Bill To"
-- Extract FULL product name
+VERY IMPORTANT DEFINITIONS:
+
+- Vendor = the company that ISSUED the invoice (seller)
+- Customer = the company receiving the invoice (buyer)
+
+STRICT RULES:
+
+- ALWAYS extract the Vendor (seller), NOT the customer
+- Vendor is usually:
+  • At the TOP of the invoice
+  • Has GST number, address, logo
+  • Appears as "From", "Seller", or company header
+
+- IGNORE:
+  • "Bill To"
+  • "Ship To"
+  • Customer details
+
+- NEVER return customer as vendor
+
+DATA RULES:
+
+- Extract FULL product name exactly
 - Quantity = number only
-- Price = unit price
+- Price = unit price (not total)
+- Do NOT guess values
 
 Return ONLY JSON:
 

@@ -19,7 +19,7 @@ Your task is to extract invoice data from the PDF.
 VERY IMPORTANT DEFINITIONS:
 
 - Vendor = the company that ISSUED the invoice (seller)
-- Customer = the company receiving the invoice (buyer)
+- Customer = the company receiving the invoice (buyer) (In invoice when you see 'to' some company name then it is customer)
 
 STRICT RULES:
 

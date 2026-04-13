@@ -1,7 +1,6 @@
 fastapi
 uvicorn
 openai
-pdf2image
 pillow
 python-multipart
 openpyxl
